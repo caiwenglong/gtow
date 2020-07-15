@@ -58,8 +58,8 @@ public class ElasticsearchClientConfigTest {
     public void testCreateIndex() throws IOException {
         // new一个“创建索引”请求的对象
         CreateIndexRequest createIndexRequest = new CreateIndexRequest(INDEX_NAME);
-
         // 执行请求，并且获得请求结果
+
         CreateIndexResponse createIndexResponse =
                 restHighLevelClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
 
@@ -95,16 +95,16 @@ public class ElasticsearchClientConfigTest {
     public void testAddDocument() throws IOException {
         // 前期工作，先创建一个对象，用来存入文档
         TbWebsite tbWebsite = new TbWebsite();
-        tbWebsite.setName("baidu");
-        tbWebsite.setUrl("www.baidu.com");
+        tbWebsite.setName("hellow a world");
+        tbWebsite.setUrl("https://caiwenglong.github.io/");
 
 
         // new 一个无状态请求
         IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
 
         // 配置规则
-        indexRequest.id("1"); // 设置文档ID
-        indexRequest.timeout("1s");
+        indexRequest.id("12"); // 设置文档ID
+        indexRequest.timeout("30s");
 
         // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
         indexRequest.source(JSON.toJSONString(tbWebsite), XContentType.JSON);

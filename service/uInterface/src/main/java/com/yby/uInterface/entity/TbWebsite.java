@@ -39,18 +39,25 @@ public class TbWebsite implements Serializable {
     @ApiModelProperty(value = "网站logo")
     private String logo;
 
+    @ApiModelProperty(value = "分类表ID")
     private String idCategory;
 
+    @ApiModelProperty(value = "关键字表ID")
     private String keywords;
 
+    @ApiModelProperty(value = "管理员表ID")
     private String idAdmin;
 
-    private String idStatisitcs;
+    @ApiModelProperty(value = "统计表ID")
+    private String idStatistics;
 
+    @ApiModelProperty(value = "竞价表ID")
     private String idBiding;
 
+    @ApiModelProperty(value = "创建时间")
     private Date gmtCreate;
 
+    @ApiModelProperty(value = "更新时间")
     private Date gmtModified;
 
 
