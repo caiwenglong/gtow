@@ -95,7 +95,7 @@ public class ElasticsearchClientConfigTest {
     public void testAddDocument() throws IOException {
         // 前期工作，先创建一个对象，用来存入文档
         TbWebsite tbWebsite = new TbWebsite();
-        tbWebsite.setName("hellow a world");
+        tbWebsite.setName("淘宝客");
         tbWebsite.setUrl("https://caiwenglong.github.io/");
 
 
@@ -103,7 +103,7 @@ public class ElasticsearchClientConfigTest {
         IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
 
         // 配置规则
-        indexRequest.id("12"); // 设置文档ID
+        indexRequest.id("2"); // 设置文档ID
         indexRequest.timeout("30s");
 
         // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
@@ -175,6 +175,18 @@ public class ElasticsearchClientConfigTest {
 
         System.out.println(delete);
         System.out.println(delete.status());
+    }
+
+    // 批量删除
+    @Test
+    public void testBatchDelDoc() throws IOException {
+        for (int i = 0; i < 12; i++) {
+            String id = i + "";
+            DeleteRequest deleteRequest = new DeleteRequest(INDEX_NAME, id);
+            DeleteResponse delete = restHighLevelClient.delete(deleteRequest, RequestOptions.DEFAULT);
+            System.out.println(delete);
+            System.out.println(delete.status());
+        }
     }
 
     // 批量添加

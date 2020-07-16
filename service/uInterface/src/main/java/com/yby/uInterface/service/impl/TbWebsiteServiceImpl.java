@@ -55,7 +55,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         // 通过SearchSourceBuilder来构建查询条件
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         // 分页
-        searchSourceBuilder.from(pageNo);
+        searchSourceBuilder.from(pageNo - 1);
         searchSourceBuilder.size(pageSize);
 
 
@@ -63,9 +63,10 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         //assert keyword != null; // 断言keyword不能为空
         // queryStringQuery会在所有的字段中查询，这边设置缩小范围，只在字段为name和url这两个中查询
         QueryStringQueryBuilder queryBuilder = QueryBuilders.queryStringQuery(keyword)
-                .field(field_id)
                 .field(field_name)
                 .field(field_url);
+
+//        MatchQueryBuilder queryBuilder = QueryBuilders.matchQuery("name", keyword);
 
 
         searchSourceBuilder.query(queryBuilder);
@@ -91,7 +92,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         searchSourceBuilder.sort(scoreSortBuilder);
 
 
-        //  查询超过30s，就超时
+        //  查询超过60s，就超时
         searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
 
 
@@ -112,15 +113,12 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
                 highlightName.append(name);
             }
 
-            System.out.println(highlightName);
-
             Map<String, Object> sourceAsMap = documentHit.getSourceAsMap();
 
             TbWebsite tbWebsite = new TbWebsite();
             tbWebsite.setName(highlightName.toString());
             tbWebsite.setUrl(sourceAsMap.get("url").toString());
             tbWebsiteArrayList.add(tbWebsite);
-            System.out.println(documentHit);
         }
 
 

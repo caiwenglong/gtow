@@ -19,7 +19,50 @@ public class RS {
     private String message;
 
     @ApiModelProperty(value = "返回的data")
-    private Map<String, Object> data = new HashMap<String, Object>();
+    private Map<String, Object> data = new HashMap<>();
+
+
+    private RS(){}
+
+    // 成功时返回的对象
+    public static RS success() {
+        RS rs = new RS();
+        rs.setIsSuccess(true);
+        rs.setCode(ResultCode.SUCCESS_CODE);
+        rs.setMessage("成功");
+        return rs;
+    }
+
+    // 失败时返回的对象
+    public static RS error() {
+        RS rs = new RS();
+        rs.setIsSuccess(true);
+        rs.setCode(ResultCode.SUCCESS_CODE);
+        rs.setMessage("成功");
+        return rs;
+    }
+
+    // 以下三个是可以修改的属性
+
+    public RS message(String message) {
+        this.setMessage(message);
+        return this;
+    }
+
+    public RS code(String code) {
+        this.setCode(code);
+        return this;
+    }
+
+    public RS data(String key, Object value){
+        this.data.put(key, value);
+        return this;
+    }
+
+    public RS data(Map<String, Object> map) {
+        this.setData(map);
+        return this;
+    }
 
 
 }

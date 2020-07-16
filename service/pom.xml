@@ -17,6 +17,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.yby</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
+
+
         <!-- 不加这个程序启动后就会马上退出 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

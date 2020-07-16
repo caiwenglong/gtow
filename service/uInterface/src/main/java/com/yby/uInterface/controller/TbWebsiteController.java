@@ -1,17 +1,14 @@
 package com.yby.uInterface.controller;
 
 
+import com.yby.commonUtils.RS;
 import com.yby.uInterface.entity.TbWebsite;
 import com.yby.uInterface.service.TbWebsiteService;
-import com.yby.uInterface.service.impl.TbWebsiteServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ import java.util.ArrayList;
  * @author caiwenlong
  * @since 2020-07-03
  */
-@Api(description="网站展示")
+@Api(tags="通过关键字获取数据")
 @CrossOrigin
 @RestController
 @RequestMapping("/uInterface/tb-website")
@@ -32,12 +29,17 @@ public class TbWebsiteController {
     @Autowired
     private TbWebsiteService tbWebsiteService;
 
-    @ApiOperation(value = "返回请求的数据")
-    @GetMapping("/find")
-    public ArrayList<TbWebsite> getTbWebsiteByKeyword() throws IOException {
+    @ApiOperation(value = "通过关键字请求返回的数据")
+    @GetMapping("/find/{keyword}/{pageNo}/{pageSize}")
+    public RS getTbWebsiteByKeyword(
+            @ApiParam(name = "keyword", value = "要搜索的关键字", required = true)
+            @PathVariable String keyword, /*关键字*/
+            @PathVariable Integer pageNo,  // 开始查询第几页
+            @PathVariable Integer pageSize // 一页显示几条数据
+    ) throws IOException {
 
-
-        return tbWebsiteService.getTbWebsite("hello world", 1, 6);
+        ArrayList<TbWebsite> websiteArrayList = tbWebsiteService.getTbWebsite(keyword, pageNo, pageSize);
+        return RS.success().data("websiteArrayList", websiteArrayList);
     }
 
 }
