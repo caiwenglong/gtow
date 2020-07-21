@@ -1,4 +1,4 @@
-package com.yby.uInterface.config;
+package com.yby.commonUtils.ES;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;

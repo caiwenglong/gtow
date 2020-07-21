@@ -2,9 +2,11 @@ package com.yby.uInterface.service;
 
 import com.yby.uInterface.entity.TbWebsite;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.elasticsearch.client.RestHighLevelClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,6 +18,6 @@ import java.util.ArrayList;
  */
 public interface TbWebsiteService extends IService<TbWebsite> {
 
-    public ArrayList<TbWebsite> getTbWebsite(String keyword, int pageNo, int pageSize) throws IOException;
+    public ArrayList<TbWebsite> getWebsiteSourceMapList(String keyword, int pageNo, int pageSize) throws IOException;
 
 }

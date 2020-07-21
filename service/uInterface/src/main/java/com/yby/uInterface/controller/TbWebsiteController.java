@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 public class TbWebsiteController {
     @Autowired
     private TbWebsiteService tbWebsiteService;
+    private Object website;
 
     @ApiOperation(value = "通过关键字请求返回的数据")
     @GetMapping("/find/{keyword}/{pageNo}/{pageSize}")
@@ -38,7 +40,7 @@ public class TbWebsiteController {
             @PathVariable Integer pageSize // 一页显示几条数据
     ) throws IOException {
 
-        ArrayList<TbWebsite> websiteArrayList = tbWebsiteService.getTbWebsite(keyword, pageNo, pageSize);
+        ArrayList<TbWebsite> websiteArrayList = tbWebsiteService.getWebsiteSourceMapList(keyword, pageNo, pageSize);
         return RS.success().data("websiteArrayList", websiteArrayList);
     }
 

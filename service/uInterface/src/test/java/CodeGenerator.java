@@ -24,7 +24,7 @@ public class CodeGenerator {
         // 2、全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir("F:\\personal-code\\gtow\\service\\uInterface" + "/src/main/java");
+        gc.setOutputDir("F:\\personal-code\\gtow\\service\\uAdmin" + "/src/main/java");
 
         gc.setAuthor("caiwenlong");
         gc.setOpen(false); //生成后是否打开资源管理器
@@ -50,8 +50,8 @@ public class CodeGenerator {
 
         // 4、包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("uInterface"); //模块名
-        //包  com.atguigu.eduservice
+        pc.setModuleName("uAdmin"); //模块名
+        //包  com.yby.eduservice
         pc.setParent("com.yby");
         //包  com.atguigu.eduservice.controller
         pc.setController("controller");
