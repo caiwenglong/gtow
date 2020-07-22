@@ -1,6 +1,6 @@
 package com.yby.uInterface.mapper;
 
-import com.yby.uInterface.entity.TbWebsite;
+import com.yby.common.entity.TbWebsite;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

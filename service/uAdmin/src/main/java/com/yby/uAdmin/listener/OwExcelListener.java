@@ -2,13 +2,14 @@ package com.yby.uAdmin.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.yby.uAdmin.entity.TbWebsite;
+import com.yby.common.entity.SimpleWebsite;
+import com.yby.common.entity.TbWebsite;
 import com.yby.uAdmin.service.TbWebsiteService;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public class OwExcelListener extends AnalysisEventListener<TbWebsite> {
+public class OwExcelListener extends AnalysisEventListener<SimpleWebsite> {
 
     /*
      *   这边需要用到TbWebsiteService来保存读到的excel内容
@@ -36,13 +37,19 @@ public class OwExcelListener extends AnalysisEventListener<TbWebsite> {
     *       - TbWebsite tbWebsite：第一个参数就是每行的内容，也就是一个对象（一行即是一个对象）
     * */
     @Override
-    public void invoke(TbWebsite website, AnalysisContext analysisContext) {
+    public void invoke(SimpleWebsite website, AnalysisContext analysisContext) {
 
         if(website == null) {
             System.out.println("null");
         }
 
-        this.websiteArrayList.add(website);
+        TbWebsite tbWebsite = new TbWebsite();
+        assert website != null;
+        tbWebsite.setName(website.getName());
+        tbWebsite.setUrl(website.getUrl());
+
+
+        this.websiteArrayList.add(tbWebsite);
     }
 
     //读取excel表头信息

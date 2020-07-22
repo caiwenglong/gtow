@@ -1,27 +1,15 @@
 package com.yby.uInterface.service.impl;
 
-import com.yby.uInterface.entity.TbWebsite;
+import com.yby.common.entity.TbWebsite;
 import com.yby.uInterface.mapper.TbWebsiteMapper;
 import com.yby.uInterface.service.TbWebsiteService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.poi.hssf.record.DVALRecord;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.text.Text;
-import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.*;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.sort.ScoreSortBuilder;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.yby.commonUtils.ES.ES;
+import com.yby.service.base.ES.ES;
 
 import java.io.IOException;
 import java.util.ArrayList;

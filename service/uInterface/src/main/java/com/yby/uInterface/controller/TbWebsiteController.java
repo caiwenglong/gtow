@@ -2,7 +2,7 @@ package com.yby.uInterface.controller;
 
 
 import com.yby.commonUtils.RS;
-import com.yby.uInterface.entity.TbWebsite;
+import com.yby.common.entity.TbWebsite;
 import com.yby.uInterface.service.TbWebsiteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

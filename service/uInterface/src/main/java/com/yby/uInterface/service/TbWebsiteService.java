@@ -1,6 +1,6 @@
 package com.yby.uInterface.service;
 
-import com.yby.uInterface.entity.TbWebsite;
+import com.yby.common.entity.TbWebsite;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.elasticsearch.client.RestHighLevelClient;
 

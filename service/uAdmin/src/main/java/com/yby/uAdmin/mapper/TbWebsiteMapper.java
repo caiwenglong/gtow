@@ -1,6 +1,6 @@
 package com.yby.uAdmin.mapper;
 
-import com.yby.uAdmin.entity.TbWebsite;
+import com.yby.common.entity.TbWebsite;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

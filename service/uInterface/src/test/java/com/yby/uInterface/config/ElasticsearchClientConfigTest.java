@@ -2,7 +2,7 @@ package com.yby.uInterface.config;
 
 
 import com.alibaba.fastjson.JSON;
-import com.yby.uInterface.entity.TbWebsite;
+import com.yby.common.entity.TbWebsite;
 import org.apache.lucene.util.QueryBuilder;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;

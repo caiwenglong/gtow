@@ -1,6 +1,6 @@
 package com.yby.uAdmin.service;
 
-import com.yby.uAdmin.entity.TbWebsite;
+import com.yby.common.entity.TbWebsite;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 

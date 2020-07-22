@@ -1,8 +1,9 @@
 package com.yby.uAdmin.service.impl;
 
 import com.alibaba.excel.EasyExcel;
-import com.yby.commonUtils.ES.ES;
-import com.yby.uAdmin.entity.TbWebsite;
+import com.yby.common.entity.SimpleWebsite;
+import com.yby.service.base.ES.ES;
+import com.yby.common.entity.TbWebsite;
 import com.yby.uAdmin.listener.OwExcelListener;
 import com.yby.uAdmin.mapper.TbWebsiteMapper;
 import com.yby.uAdmin.service.TbWebsiteService;
@@ -48,7 +49,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         *   3. 用来读写excel的监听器
         * */
         OwExcelListener owExcelListener = new OwExcelListener(tbWebsiteService);
-        EasyExcel.read(inputStream, TbWebsite.class, owExcelListener).sheet().doRead();
+        EasyExcel.read(inputStream, SimpleWebsite.class, owExcelListener).sheet().doRead();
         this.websiteArrayList = owExcelListener.getExcelDataList();
 
     }
@@ -58,10 +59,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     public String batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException {
         this.readWebsiteExcel(file, tbWebsiteService);
         ES es = new ES();
-        for (TbWebsite website: this.websiteArrayList) {
-            String s = es.addDoc(client, website);
-            System.out.println(s);
-        }
+        es.addDoc(client, this.websiteArrayList);
         return "OK";
     }
 }

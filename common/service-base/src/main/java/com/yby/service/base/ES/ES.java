@@ -1,17 +1,22 @@
-package com.yby.commonUtils.ES;
+package com.yby.service.base.ES;
 
 import com.alibaba.fastjson.JSON;
+import com.yby.common.entity.TbWebsite;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -19,7 +24,6 @@ import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
@@ -111,27 +115,62 @@ public class ES {
         return sourceMapArrayList;
     }
 
+    // 判断文档是否存在
+    public Boolean isExitDoc(RestHighLevelClient client, TbWebsite website) throws IOException {
+
+        // 创建请求
+        CountRequest countRequest = new CountRequest();
+        // 通过SearchSourceBuilder来构建查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        // 精确查询
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("url", website.getUrl());
+
+        // 将查询条件放到查询构建器里面
+        searchSourceBuilder.query(termQueryBuilder);
+        searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS)); // 查询超过60秒就报错
+
+        CountRequest source = countRequest.source(searchSourceBuilder);
+        // 发送查询请求
+        CountResponse countResponse = client.count(source, RequestOptions.DEFAULT);
+        long count = countResponse.getCount();
+        RestStatus status = countResponse.status();
+
+        return count > 0;
+    }
+
     // 批量添加文档
-    public String addDoc(RestHighLevelClient client, Object object) throws IOException {
+    public String addDoc(RestHighLevelClient client, ArrayList<TbWebsite> websites) throws IOException {
 
 
-        // new 一个无状态请求
-        IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
+        for (TbWebsite website: websites) {
+            // 判断文档是否存在
+            if(this.isExitDoc(client, website)) {
+                System.out.println(website);
+                return "OK";
+            };
+            // 给对象赋值
+            TbWebsite tbWebsite = new TbWebsite();
+            tbWebsite.setName(website.getName());
+            tbWebsite.setUrl(website.getUrl());
 
-        // 配置规则
-        UUID uuid = UUID.randomUUID();
-        indexRequest.id(String.valueOf(uuid)); // 设置文档ID
-        indexRequest.timeout("60s");
+            // 配置规则
+            UUID uuid = UUID.randomUUID();
 
-        // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
-        indexRequest.source(JSON.toJSONString(object), XContentType.JSON);
+            // new 一个无状态请求
+            IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
+
+            indexRequest.id(String.valueOf(uuid)); // 设置文档ID
+            indexRequest.timeout("60s");
+
+            // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
+            indexRequest.source(JSON.toJSONString(website), XContentType.JSON);
 
 
-        // 规则配置好了， 数据也塞进去了，最后就是执行请求
-        IndexResponse index = client.index(indexRequest, RequestOptions.DEFAULT);
+            // 规则配置好了， 数据也塞进去了，最后就是执行请求
+            IndexResponse index = client.index(indexRequest, RequestOptions.DEFAULT);
+        }
 
-        System.out.println(index.toString());
-        System.out.println(index.status());
         return "OK";
     }
 }
