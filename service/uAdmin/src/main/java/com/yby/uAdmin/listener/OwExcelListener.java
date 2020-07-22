@@ -20,7 +20,7 @@ public class OwExcelListener extends AnalysisEventListener<SimpleWebsite> {
 
     public TbWebsiteService tbWebsiteService;
 
-    ArrayList<TbWebsite> websiteArrayList = new ArrayList<>();
+    ArrayList<SimpleWebsite> websiteArrayList = new ArrayList<>();
 
     // 无参构造
     public OwExcelListener() {
@@ -43,7 +43,7 @@ public class OwExcelListener extends AnalysisEventListener<SimpleWebsite> {
             System.out.println("null");
         }
 
-        TbWebsite tbWebsite = new TbWebsite();
+        SimpleWebsite tbWebsite = new SimpleWebsite();
         assert website != null;
         tbWebsite.setName(website.getName());
         tbWebsite.setUrl(website.getUrl());
@@ -65,7 +65,7 @@ public class OwExcelListener extends AnalysisEventListener<SimpleWebsite> {
     }
 
     // 返回已读取的数据
-    public ArrayList<TbWebsite> getExcelDataList() {
+    public ArrayList<SimpleWebsite> getExcelDataList() {
         return this.websiteArrayList;
     }
 

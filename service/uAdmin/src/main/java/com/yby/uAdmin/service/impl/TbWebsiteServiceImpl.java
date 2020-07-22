@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * <p>
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 @Service
 public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite> implements TbWebsiteService {
 
-    ArrayList<TbWebsite> websiteArrayList = new ArrayList<>();
+    ArrayList<SimpleWebsite> websiteArrayList = new ArrayList<>();
 
     @Autowired
     @Qualifier("restHighLevelClient")
@@ -56,10 +57,9 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
 
 
     @Override
-    public String batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException {
+    public Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException {
         this.readWebsiteExcel(file, tbWebsiteService);
         ES es = new ES();
-        es.addDoc(client, this.websiteArrayList);
-        return "OK";
+        return es.esBatchAddDoc(client, this.websiteArrayList);
     }
 }

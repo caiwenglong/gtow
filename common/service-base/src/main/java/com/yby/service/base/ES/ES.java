@@ -1,6 +1,7 @@
 package com.yby.service.base.ES;
 
 import com.alibaba.fastjson.JSON;
+import com.yby.common.entity.SimpleWebsite;
 import com.yby.common.entity.TbWebsite;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
@@ -25,6 +26,7 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +36,10 @@ public class ES {
     String FIELD_ID = "id";
     String FIELD_NAME = "name";
     String FIELD_URL = "url";
+
+    private final ArrayList<SimpleWebsite> exitWebsites = new ArrayList<>();
+    private final ArrayList<SimpleWebsite> successWebsites = new ArrayList<>();
+    private final Map<String, ArrayList<SimpleWebsite>> batchAddResult = new HashMap<>();
 
     // 通过关键字查询文档
     public ArrayList<Map<String, Object>> getWebsiteSourceMapList(RestHighLevelClient client, String keyword, int pageNo, int pageSize) throws IOException {
@@ -116,7 +122,7 @@ public class ES {
     }
 
     // 判断文档是否存在
-    public Boolean isExitDoc(RestHighLevelClient client, TbWebsite website) throws IOException {
+    public Boolean isExitDoc(RestHighLevelClient client, SimpleWebsite website) throws IOException {
 
         // 创建请求
         CountRequest countRequest = new CountRequest();
@@ -124,7 +130,7 @@ public class ES {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         // 精确查询
-        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("url", website.getUrl());
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("url.keyword", website.getUrl());
 
         // 将查询条件放到查询构建器里面
         searchSourceBuilder.query(termQueryBuilder);
@@ -140,37 +146,38 @@ public class ES {
     }
 
     // 批量添加文档
-    public String addDoc(RestHighLevelClient client, ArrayList<TbWebsite> websites) throws IOException {
+    public Map<String, ArrayList<SimpleWebsite>> esBatchAddDoc(RestHighLevelClient client, ArrayList<SimpleWebsite> websites) throws IOException {
 
-
-        for (TbWebsite website: websites) {
+        for (SimpleWebsite website: websites) {
             // 判断文档是否存在
             if(this.isExitDoc(client, website)) {
-                System.out.println(website);
-                return "OK";
-            };
-            // 给对象赋值
-            TbWebsite tbWebsite = new TbWebsite();
-            tbWebsite.setName(website.getName());
-            tbWebsite.setUrl(website.getUrl());
+                this.exitWebsites.add(website);
+            } else {
+                // 给对象赋值
+                SimpleWebsite tbWebsite = new SimpleWebsite();
+                tbWebsite.setName(website.getName());
+                tbWebsite.setUrl(website.getUrl());
 
-            // 配置规则
-            UUID uuid = UUID.randomUUID();
+                // 配置规则
+                UUID uuid = UUID.randomUUID();
 
-            // new 一个无状态请求
-            IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
+                // new 一个无状态请求
+                IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
 
-            indexRequest.id(String.valueOf(uuid)); // 设置文档ID
-            indexRequest.timeout("60s");
+                indexRequest.id(String.valueOf(uuid)); // 设置文档ID
+                indexRequest.timeout("60s");
 
-            // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
-            indexRequest.source(JSON.toJSONString(website), XContentType.JSON);
+                // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
+                indexRequest.source(JSON.toJSONString(website), XContentType.JSON);
 
 
-            // 规则配置好了， 数据也塞进去了，最后就是执行请求
-            IndexResponse index = client.index(indexRequest, RequestOptions.DEFAULT);
+                // 规则配置好了， 数据也塞进去了，最后就是执行请求
+                IndexResponse index = client.index(indexRequest, RequestOptions.DEFAULT);
+                this.successWebsites.add(website);
+            }
         }
-
-        return "OK";
+        batchAddResult.put("exitWebsites", this.exitWebsites);
+        batchAddResult.put("successWebsites", this.successWebsites);
+        return batchAddResult;
     }
 }
