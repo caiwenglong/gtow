@@ -3,7 +3,6 @@ package com.yby.uAdmin.listener;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.yby.common.entity.SimpleWebsite;
-import com.yby.common.entity.TbWebsite;
 import com.yby.uAdmin.service.TbWebsiteService;
 
 import java.util.ArrayList;

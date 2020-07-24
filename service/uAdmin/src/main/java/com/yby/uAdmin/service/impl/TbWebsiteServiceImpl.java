@@ -35,6 +35,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     @Autowired
     @Qualifier("restHighLevelClient")
     private RestHighLevelClient client;
+    ES es = new ES();
 
     @Override
     public void readWebsiteExcel(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException {
@@ -59,7 +60,11 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     @Override
     public Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException {
         this.readWebsiteExcel(file, tbWebsiteService);
-        ES es = new ES();
         return es.esBatchAddDoc(client, this.websiteArrayList);
+    }
+
+    @Override
+    public void batchDelWebsite(ArrayList<SimpleWebsite> websites) throws IOException {
+        es.esBatchDelDoc(client, websites);
     }
 }

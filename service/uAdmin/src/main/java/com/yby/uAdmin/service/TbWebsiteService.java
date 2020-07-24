@@ -23,4 +23,6 @@ public interface TbWebsiteService extends IService<TbWebsite> {
 
     public Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException;
 
+    public void batchDelWebsite(ArrayList<SimpleWebsite> websites) throws IOException;
+
 }

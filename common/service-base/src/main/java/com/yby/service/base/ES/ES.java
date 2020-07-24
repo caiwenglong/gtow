@@ -3,6 +3,8 @@ package com.yby.service.base.ES;
 import com.alibaba.fastjson.JSON;
 import com.yby.common.entity.SimpleWebsite;
 import com.yby.common.entity.TbWebsite;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -179,5 +181,16 @@ public class ES {
         batchAddResult.put("exitWebsites", this.exitWebsites);
         batchAddResult.put("successWebsites", this.successWebsites);
         return batchAddResult;
+    }
+
+    // 批量删除文档
+    public void esBatchDelDoc(RestHighLevelClient client, ArrayList<SimpleWebsite> websites) throws IOException {
+
+        // new 一个删除请求
+        for (SimpleWebsite website : websites) {
+            DeleteRequest deleteRequest = new DeleteRequest(INDEX_NAME);
+            deleteRequest.id(website.getId());
+            DeleteResponse delete = client.delete(deleteRequest, RequestOptions.DEFAULT);
+        }
     }
 }

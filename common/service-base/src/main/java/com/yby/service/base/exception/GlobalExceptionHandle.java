@@ -15,9 +15,7 @@ public class GlobalExceptionHandle {
         return RS.error();
     }
 
-
-
-    @ExceptionHandler(ArithmeticException.class)
+    @ExceptionHandler(CustomException.class)
     @ResponseBody
     public RS error(CustomException e){
         e.printStackTrace();
