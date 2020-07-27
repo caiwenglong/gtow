@@ -8,12 +8,12 @@ import lombok.Data;
 @Data
 public class SimpleWebsite {
 
-    @ApiModelProperty(value = "网站id")
-    private String id;
-
     @ApiModelProperty(value = "网站名称")
     private String name;
 
     @ApiModelProperty(value = "网站地址")
     private String url;
+
+    @ApiModelProperty(value = "网站id")
+    private String id;
 }

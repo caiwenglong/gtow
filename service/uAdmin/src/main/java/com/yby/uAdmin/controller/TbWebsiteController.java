@@ -36,7 +36,15 @@ public class TbWebsiteController {
     @Autowired
     TbWebsiteService tbWebsiteService;
 
-    //  通过excel批量添加
+    @ApiOperation(value = "添加网站")
+    @PostMapping("addWebsite")
+    public RS addWebsite(
+            @ApiParam(name = "website", value = "网站对象", required = true)
+            @RequestBody  SimpleWebsite website) {
+        tbWebsiteService.addWebsite(website);
+        return RS.success();
+    }
+
     @ApiOperation(value = "通过excel批量添加网站")
     @PostMapping("batchAddWebsite")
     public RS batchAddWebsite(MultipartFile file) throws IOException {
@@ -45,7 +53,6 @@ public class TbWebsiteController {
         return RS.success().message("添加成功").data("batchAddResult", arrayListMapWebsite);
     }
 
-    // 通过excel批量删除
     @ApiOperation(value = "批量删除网站")
     @DeleteMapping ("/batchDelWebsite/{idList}")
     public RS batchDelWebsite(

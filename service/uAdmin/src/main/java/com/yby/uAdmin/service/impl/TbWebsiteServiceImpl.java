@@ -56,10 +56,19 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
 
     }
 
+    @Override
+    public void addWebsite(SimpleWebsite website) {
+        es.esAddDoc(client, website);
+    }
+
 
     @Override
-    public Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException {
-        this.readWebsiteExcel(file, tbWebsiteService);
+    public Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) {
+        try {
+            this.readWebsiteExcel(file, tbWebsiteService);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return es.esBatchAddDoc(client, this.websiteArrayList);
     }
 

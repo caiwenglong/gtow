@@ -3,6 +3,7 @@ package com.yby.service.base.ES;
 import com.alibaba.fastjson.JSON;
 import com.yby.common.entity.SimpleWebsite;
 import com.yby.common.entity.TbWebsite;
+import com.yby.service.base.exception.CustomException;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -147,35 +148,60 @@ public class ES {
         return count > 0;
     }
 
+    public void commonAddDoc(RestHighLevelClient client, SimpleWebsite website) {
+        // 给对象赋值
+        SimpleWebsite tbWebsite = new SimpleWebsite();
+        tbWebsite.setName(website.getName());
+        tbWebsite.setUrl(website.getUrl());
+
+        // 设置ID
+        UUID uuid = UUID.randomUUID();
+
+        // new 一个无状态请求
+        IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
+
+        indexRequest.id(String.valueOf(uuid)); // 设置文档ID
+        indexRequest.timeout("60s");
+
+        // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
+        indexRequest.source(JSON.toJSONString(website), XContentType.JSON);
+
+
+        // 规则配置好了， 数据也塞进去了，最后就是执行请求
+        try {
+            IndexResponse index = client.index(indexRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 添加单个文档
+    public void esAddDoc(RestHighLevelClient client, SimpleWebsite website) {
+        try {
+            if(this.isExitDoc(client, website)) {
+                throw new CustomException("OW2007", "要添加的网站已存在！");
+            } else {
+                this.commonAddDoc(client, website);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // 批量添加文档
-    public Map<String, ArrayList<SimpleWebsite>> esBatchAddDoc(RestHighLevelClient client, ArrayList<SimpleWebsite> websites) throws IOException {
+    public Map<String, ArrayList<SimpleWebsite>> esBatchAddDoc(RestHighLevelClient client, ArrayList<SimpleWebsite> websites) {
 
         for (SimpleWebsite website: websites) {
             // 判断文档是否存在
-            if(this.isExitDoc(client, website)) {
-                this.exitWebsites.add(website);
-            } else {
-                // 给对象赋值
-                SimpleWebsite tbWebsite = new SimpleWebsite();
-                tbWebsite.setName(website.getName());
-                tbWebsite.setUrl(website.getUrl());
-
-                // 配置规则
-                UUID uuid = UUID.randomUUID();
-
-                // new 一个无状态请求
-                IndexRequest indexRequest = new IndexRequest(INDEX_NAME);
-
-                indexRequest.id(String.valueOf(uuid)); // 设置文档ID
-                indexRequest.timeout("60s");
-
-                // 将数据通过source方法 放入请求，都是用json形式放入的, 所以这边需要将tbWebsite对象转为json
-                indexRequest.source(JSON.toJSONString(website), XContentType.JSON);
-
-
-                // 规则配置好了， 数据也塞进去了，最后就是执行请求
-                IndexResponse index = client.index(indexRequest, RequestOptions.DEFAULT);
-                this.successWebsites.add(website);
+            try {
+                if(this.isExitDoc(client, website)) {
+                    this.exitWebsites.add(website);
+                } else {
+                    this.commonAddDoc(client, website);
+                    this.successWebsites.add(website);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         batchAddResult.put("exitWebsites", this.exitWebsites);
