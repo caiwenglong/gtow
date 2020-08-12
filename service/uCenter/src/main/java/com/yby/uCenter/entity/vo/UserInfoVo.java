@@ -1,4 +1,4 @@
-package com.yby.uCenter.entity;
+package com.yby.uCenter.entity.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -14,7 +14,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="返回给前端的User对象", description="")
-public class UserInfo {
+public class UserInfoVo {
     @ApiModelProperty(value = "用户ID")
     private String id;
 
@@ -43,5 +43,5 @@ public class UserInfo {
     private String role;
 
     @ApiModelProperty(value = "用户token")
-    private String jwtToken;
+    private String token;
 }

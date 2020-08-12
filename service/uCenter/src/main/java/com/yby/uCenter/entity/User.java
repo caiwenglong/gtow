@@ -1,7 +1,10 @@
 package com.yby.uCenter.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -48,6 +51,9 @@ public class User implements Serializable {
     @ApiModelProperty(value = "头像")
     private String avatar;
 
+    @ApiModelProperty(value = "用户角色")
+    private String role;
+
     @ApiModelProperty(value = "是否禁用，1禁用，2未禁用")
     private Boolean isDisabled;
 
@@ -55,13 +61,11 @@ public class User implements Serializable {
     private Boolean isDelete;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT) // 自动填充
     private Date gmtCreate;
 
     @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE) // 自动填充
     private Date gmtModified;
-
-    @ApiModelProperty(value = "用户角色")
-    private String role;
-
 
 }

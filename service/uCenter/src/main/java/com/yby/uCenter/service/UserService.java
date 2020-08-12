@@ -1,8 +1,13 @@
 package com.yby.uCenter.service;
 
+import com.yby.commonUtils.RS;
 import com.yby.uCenter.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yby.uCenter.entity.UserInfo;
+import com.yby.uCenter.entity.vo.LoginVo;
+import com.yby.uCenter.entity.vo.RegisterVo;
+import com.yby.uCenter.entity.vo.UserInfoVo;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -14,6 +19,13 @@ import com.yby.uCenter.entity.UserInfo;
  */
 public interface UserService extends IService<User> {
 
-    public UserInfo login(User user);
+    // 登录方法
+    RS login(LoginVo user);
+
+    // 注册方法
+    void register(RegisterVo registerVo);
+
+    // 获取用户信息
+    UserInfoVo getUserInfo(HttpServletRequest token);
 
 }

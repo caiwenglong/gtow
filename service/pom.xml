@@ -15,6 +15,7 @@
         <module>uInterface</module>
         <module>uAdmin</module>
         <module>uCenter</module>
+        <module>msm</module>
     </modules>
 
     <dependencies>

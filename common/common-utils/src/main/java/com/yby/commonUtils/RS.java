@@ -36,9 +36,9 @@ public class RS {
     // 失败时返回的对象
     public static RS error() {
         RS rs = new RS();
-        rs.setIsSuccess(true);
-        rs.setCode(ResultCode.SUCCESS_CODE);
-        rs.setMessage("成功");
+        rs.setIsSuccess(false);
+        rs.setCode(ResultCode.ERROR_CODE);
+        rs.setMessage("失败");
         return rs;
     }
 

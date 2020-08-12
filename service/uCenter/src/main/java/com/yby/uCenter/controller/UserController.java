@@ -1,18 +1,19 @@
 package com.yby.uCenter.controller;
 
 
+import com.yby.commonUtils.JwtUtils;
 import com.yby.commonUtils.RS;
-import com.yby.uCenter.entity.User;
-import com.yby.uCenter.entity.UserInfo;
+import com.yby.uCenter.entity.vo.LoginVo;
+import com.yby.uCenter.entity.vo.RegisterVo;
+import com.yby.uCenter.entity.vo.UserInfoVo;
 import com.yby.uCenter.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -24,19 +25,38 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "用户中心")
 @RestController
-@RequestMapping("/uCenter/user")
+@RequestMapping("/uCenter/")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @ApiOperation("登录")
-    @GetMapping("/login")
+    @PostMapping("/login")
     public RS login(
-            @ApiParam(name = "user", value = "登录的用户名密码")
-            User user) {
-        UserInfo userInfo = userService.login(user);
-        return RS.success().data("userInfo", userInfo);
+            @ApiParam(name = "username", value = "登录的用户名密码")
+                    @RequestBody LoginVo user) {
+        return userService.login(user);
+    }
+
+    @ApiOperation(value = "用户注册")
+    @PostMapping("/register")
+    public RS registerUser(
+            @ApiParam(name = "registerVo", value = "注册的用户对")
+            @RequestBody RegisterVo registerVo
+            ) {
+        userService.register(registerVo);
+        return RS.success();
+    }
+
+    @ApiOperation(value = "获取用户信息")
+    @GetMapping("/getInfo")
+    public RS getInfo(
+            @ApiParam(name = "request", value = "token")
+            HttpServletRequest request
+    ) {
+        UserInfoVo userInfo = userService.getUserInfo(request);
+        return RS.success().data("result", userInfo);
     }
 }
 
