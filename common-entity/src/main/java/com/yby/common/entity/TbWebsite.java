@@ -1,6 +1,8 @@
 package com.yby.common.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,8 +30,8 @@ public class TbWebsite implements Serializable {
     private static final long serialVersionUID=1L;
 
     @ApiModelProperty(value = "网站id")
-    @TableId(value = "id", type = IdType.ID_WORKER_STR)
-    private Integer id;
+    @TableId(value = "id")
+    private String id;
 
     @ApiModelProperty(value = "网站名称")
     private String name;
@@ -56,9 +58,11 @@ public class TbWebsite implements Serializable {
     private String idBiding;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 
     @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
 
 

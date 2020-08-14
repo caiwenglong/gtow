@@ -96,8 +96,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = baseMapper.selectOne(queryWrapper);
         UserInfoVo userInfoVo = new UserInfoVo();
         BeanUtils.copyProperties(user, userInfoVo);
-
-        System.out.println(userInfoVo);
         return userInfoVo;
     }
 }

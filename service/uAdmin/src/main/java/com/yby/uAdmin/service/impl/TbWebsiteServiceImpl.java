@@ -1,6 +1,7 @@
 package com.yby.uAdmin.service.impl;
 
 import com.alibaba.excel.EasyExcel;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yby.common.entity.SimpleWebsite;
 import com.yby.service.base.ES.ES;
 import com.yby.common.entity.TbWebsite;
@@ -9,6 +10,7 @@ import com.yby.uAdmin.mapper.TbWebsiteMapper;
 import com.yby.uAdmin.service.TbWebsiteService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -37,6 +40,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     private RestHighLevelClient client;
     ES es = new ES();
 
+    // 读取excel文件
     @Override
     public void readWebsiteExcel(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException {
 
@@ -56,24 +60,53 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
 
     }
 
+    // 判断网站是否存在
+    public Boolean isExitWebsite(String url) {
+        QueryWrapper<TbWebsite> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("url", url);
+        Integer count = baseMapper.selectCount(queryWrapper);
+        return count > 0;
+    }
+
+    // 添加单个网站
     @Override
     public void addWebsite(SimpleWebsite website) {
-        es.esAddDoc(client, website);
+        //es.esAddDoc(client, website);
+        TbWebsite tbWebsite = new TbWebsite();
+        BeanUtils.copyProperties(website, tbWebsite);
+        baseMapper.insert(tbWebsite);
     }
 
 
+    // 批量添加网站
     @Override
     public Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService) {
+        ArrayList<SimpleWebsite> exitWebsites = new ArrayList<>();
+        ArrayList<SimpleWebsite> successWebsites = new ArrayList<>();
+        Map<String, ArrayList<SimpleWebsite>> batchAddResult = new HashMap<>();
         try {
             this.readWebsiteExcel(file, tbWebsiteService);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return es.esBatchAddDoc(client, this.websiteArrayList);
+//        return es.esBatchAddDoc(client, this.websiteArrayList);
+        for (SimpleWebsite website : websiteArrayList) {
+            if(isExitWebsite(website.getUrl())) {
+                exitWebsites.add(website);
+            } else {
+                addWebsite(website);
+                successWebsites.add(website);
+            }
+            batchAddResult.put("exitWebsites", exitWebsites);
+            batchAddResult.put("successWebsites", successWebsites);
+        }
+        return batchAddResult;
     }
 
+    // 批量删除
     @Override
-    public void batchDelWebsite(ArrayList<SimpleWebsite> websites) throws IOException {
-        es.esBatchDelDoc(client, websites);
+    public void batchDelWebsite(ArrayList<String> idList) {
+//        es.esBatchDelDoc(client, websites);
+        baseMapper.deleteBatchIds(idList);
     }
 }

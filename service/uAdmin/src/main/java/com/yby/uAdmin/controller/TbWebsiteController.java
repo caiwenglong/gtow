@@ -37,7 +37,7 @@ public class TbWebsiteController {
     TbWebsiteService tbWebsiteService;
 
     @ApiOperation(value = "添加网站")
-    @PostMapping("addWebsite")
+    @PostMapping("/addWebsite")
     public RS addWebsite(
             @ApiParam(name = "website", value = "网站对象", required = true)
             @RequestBody  SimpleWebsite website) {
@@ -66,16 +66,9 @@ public class TbWebsiteController {
         if(idList.size() < 1) {
             throw new CustomException("OW20006", "输入的网站ID数组为空！");
         }
+        tbWebsiteService.batchDelWebsite(idList);
 
-        for (String id : idList) {
-            SimpleWebsite simpleWebsite = new SimpleWebsite();
-            simpleWebsite.setId(id);
-            simpleWebsites.add(simpleWebsite);
-        }
-
-        tbWebsiteService.batchDelWebsite(simpleWebsites);
-
-        return RS.success().data("websites", simpleWebsites);
+        return RS.success();
     }
 
 }
