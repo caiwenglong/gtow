@@ -34,6 +34,6 @@ public interface TbWebsiteService extends IService<TbWebsite> {
     void batchDelWebsite(ArrayList<String> idList);
 
     // 查询用户上传的网站
-    List<TbWebsite> selectAllWebsite(HttpServletRequest request);
+    List<TbWebsite> selectAllWebsite(String idAdmin);
 
 }

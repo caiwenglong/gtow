@@ -74,13 +74,12 @@ public class TbWebsiteController {
     }
 
     @ApiOperation(value = "查询用户上传的网站")
-    @GetMapping("/selectAllWebsite")
+    @GetMapping("/selectAllWebsite/{idAdmin}")
     public RS selectAllWebsite(
-        @ApiParam(name = "request", value = "token")
-        HttpServletRequest request
+        @ApiParam(name = "idAdmin", value = "用户id")
+        @PathVariable String idAdmin
     ) {
-        List<TbWebsite> tbWebsites = tbWebsiteService.selectAllWebsite(request);
-        System.out.println(tbWebsites);
+        List<TbWebsite> tbWebsites = tbWebsiteService.selectAllWebsite(idAdmin);
 
         return RS.success().data("tbWebsites", tbWebsites);
     }

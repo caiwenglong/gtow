@@ -114,10 +114,9 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     }
 
     @Override
-    public List<TbWebsite> selectAllWebsite(HttpServletRequest request) {
-        String userId = JwtUtils.getUserIdByJwtToken(request);
+    public List<TbWebsite> selectAllWebsite(String idAdmin) {
         QueryWrapper<TbWebsite> tbWebsiteQueryWrapper = new QueryWrapper<>();
-        tbWebsiteQueryWrapper.eq("id_admin", userId);
+        tbWebsiteQueryWrapper.eq("id_admin", idAdmin);
         return baseMapper.selectList(tbWebsiteQueryWrapper);
     }
 }
