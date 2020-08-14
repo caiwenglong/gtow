@@ -67,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public RS loginSuccess(User hitUser) {
         String jwtToken = JwtUtils.getJwtToken(hitUser.getId(), hitUser.getNickname());
 
-        return RS.success().code("OW20000").message("success").data("token", jwtToken);
+        return RS.success().data("token", jwtToken);
     }
 
     // 注册功能

@@ -3,6 +3,7 @@ package com.yby.uAdmin.service.impl;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yby.common.entity.SimpleWebsite;
+import com.yby.commonUtils.JwtUtils;
 import com.yby.service.base.ES.ES;
 import com.yby.common.entity.TbWebsite;
 import com.yby.uAdmin.listener.OwExcelListener;
@@ -16,10 +17,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -108,5 +111,13 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     public void batchDelWebsite(ArrayList<String> idList) {
 //        es.esBatchDelDoc(client, websites);
         baseMapper.deleteBatchIds(idList);
+    }
+
+    @Override
+    public List<TbWebsite> selectAllWebsite(HttpServletRequest request) {
+        String userId = JwtUtils.getUserIdByJwtToken(request);
+        QueryWrapper<TbWebsite> tbWebsiteQueryWrapper = new QueryWrapper<>();
+        tbWebsiteQueryWrapper.eq("id_admin", userId);
+        return baseMapper.selectList(tbWebsiteQueryWrapper);
     }
 }

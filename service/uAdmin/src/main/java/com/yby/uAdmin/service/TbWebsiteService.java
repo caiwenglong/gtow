@@ -5,8 +5,10 @@ import com.yby.common.entity.TbWebsite;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,15 +22,18 @@ import java.util.Map;
 public interface TbWebsiteService extends IService<TbWebsite> {
 
     // 读取excel文件数据
-    public void readWebsiteExcel(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException;
+    void readWebsiteExcel(MultipartFile file, TbWebsiteService tbWebsiteService) throws IOException;
 
     // 添加单条数据
-    public void addWebsite(SimpleWebsite website);
+    void addWebsite(SimpleWebsite website);
 
     // 通过excel批量添加数据
-    public Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService);
+    Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, TbWebsiteService tbWebsiteService);
 
     // 批量删除网站
-    public void batchDelWebsite(ArrayList<String> idList) throws IOException;
+    void batchDelWebsite(ArrayList<String> idList);
+
+    // 查询用户上传的网站
+    List<TbWebsite> selectAllWebsite(HttpServletRequest request);
 
 }

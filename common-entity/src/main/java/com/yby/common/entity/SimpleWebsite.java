@@ -15,5 +15,5 @@ public class SimpleWebsite {
     private String url;
 
     @ApiModelProperty(value = "网站id")
-    private String id;
+    private String idAdmin;
 }

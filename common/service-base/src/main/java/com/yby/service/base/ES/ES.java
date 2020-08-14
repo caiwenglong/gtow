@@ -215,7 +215,7 @@ public class ES {
         // new 一个删除请求
         for (SimpleWebsite website : websites) {
             DeleteRequest deleteRequest = new DeleteRequest(INDEX_NAME);
-            deleteRequest.id(website.getId());
+            deleteRequest.id(website.getIdAdmin());
             DeleteResponse delete = client.delete(deleteRequest, RequestOptions.DEFAULT);
         }
     }

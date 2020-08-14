@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +29,7 @@ import java.util.Map;
  * @author caiwenlong
  * @since 2020-07-17
  */
-@Api(tags = "管理网站")
+@Api(value = "管理网站")
 @RestController
 @RequestMapping("/uAdmin/tb-website")
 @CrossOrigin
@@ -39,10 +41,10 @@ public class TbWebsiteController {
     @ApiOperation(value = "添加网站")
     @PostMapping("/addWebsite")
     public RS addWebsite(
-            @ApiParam(name = "website", value = "网站对象", required = true)
+            @ApiParam(name = "website", value = "网站对象")
             @RequestBody  SimpleWebsite website) {
         tbWebsiteService.addWebsite(website);
-        return RS.success();
+        return RS.success().data("website", website);
     }
 
     @ApiOperation(value = "通过excel批量添加网站")
@@ -69,6 +71,18 @@ public class TbWebsiteController {
         tbWebsiteService.batchDelWebsite(idList);
 
         return RS.success();
+    }
+
+    @ApiOperation(value = "查询用户上传的网站")
+    @GetMapping("/selectAllWebsite")
+    public RS selectAllWebsite(
+        @ApiParam(name = "request", value = "token")
+        HttpServletRequest request
+    ) {
+        List<TbWebsite> tbWebsites = tbWebsiteService.selectAllWebsite(request);
+        System.out.println(tbWebsites);
+
+        return RS.success().data("tbWebsites", tbWebsites);
     }
 
 }
