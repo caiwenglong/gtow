@@ -1,5 +1,8 @@
 package com.yby.uInterface.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yby.common.entity.TbWebsite;
 import com.yby.uInterface.mapper.TbWebsiteMapper;
 import com.yby.uInterface.service.TbWebsiteService;
@@ -13,6 +16,7 @@ import com.yby.service.base.ES.ES;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +34,28 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     @Qualifier("restHighLevelClient")
     private RestHighLevelClient client;
 
+    @Autowired
+    private TbWebsiteMapper tbWebsiteMapper;
+
     @Override
+    public ArrayList<TbWebsite> getWebsiteSourceMapList(String keyword, int pageNo, int pageSize) throws IOException {
+        // 创建page对象
+        Page<TbWebsite> tbWebsitePage = new Page<TbWebsite>(pageNo, pageSize);
+
+        // 构造查询条件
+        QueryWrapper<TbWebsite> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("name", keyword);
+        IPage<TbWebsite> websiteIPage = tbWebsiteMapper.selectPage(tbWebsitePage, queryWrapper);
+        List<TbWebsite> list = websiteIPage.getRecords();
+
+        ArrayList<TbWebsite> websiteArrayList = new ArrayList<>();
+        for (TbWebsite website : list) {
+            websiteArrayList.add(website);
+        }
+        return websiteArrayList;
+    }
+
+    /*@Override
     public ArrayList<TbWebsite> getWebsiteSourceMapList(String keyword, int pageNo, int pageSize) throws IOException {
 
 
@@ -46,6 +71,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
             websiteArrayList.add(tbWebsite);
         }
         return websiteArrayList;
-    }
+    }*/
+
 
 }
