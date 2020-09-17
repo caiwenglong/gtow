@@ -1,6 +1,7 @@
 package com.yby.uAdmin.controller;
 
 
+import com.yby.common.entity.SimpleWbCategory;
 import com.yby.common.entity.SimpleWebsite;
 import com.yby.common.entity.WbCategory;
 import com.yby.commonUtils.RS;
@@ -45,12 +46,49 @@ public class WbCategoryController {
         return RS.success().data("wbCategory", wbCategory);
     }
 
+    @ApiOperation(value = "获得所有的网站分类")
+    @GetMapping("/getAllWbCategory")
+    public RS getAllWbCategory() {
+        ArrayList<WbCategory> allWbCategory = (ArrayList<WbCategory>) wbCategoryService.getAllWbCategory();
+        return RS.success().data("wbCategory", allWbCategory);
+    }
+
     @ApiOperation(value = "通过excel批量添加网站")
     @PostMapping("batchAddWbCategory")
     public RS batchAddWbCategory(MultipartFile file) {
 
-        Map<String, ArrayList<WbCategory>> arrayListMapWbCategory = wbCategoryService.batchAddWbCategory(file);
+        Map<String, ArrayList<String>> arrayListMapWbCategory = wbCategoryService.batchAddWbCategory(file);
         return RS.success().message("添加成功").data("batchAddResult", arrayListMapWbCategory);
+    }
+
+    @ApiOperation(value = "通过ID删除分类")
+    @DeleteMapping("/delWbCategoryById/{id}")
+    public RS delWbCategoryById(
+            @ApiParam(name = "id", value = "网站分类ID")
+            @PathVariable String id
+    ) {
+
+        int delCount = wbCategoryService.delWbCategoryById(id);
+        return RS.success().message("删除成功").data("delCount",delCount);
+    }
+
+    @ApiOperation(value = "通过名称删除分类")
+    @DeleteMapping("/delWbCategoryByName/{name}")
+    public RS delWbCategoryByName(
+            @ApiParam(name = "name", value = "网站分类ID")
+            @PathVariable String name
+    ) {
+
+        int delCount = wbCategoryService.delWbCategoryByName(name);
+        return RS.success().message("删除成功").data("delCount",delCount);
+    }
+
+    @ApiOperation(value = "通过excel批量添加网站")
+    @PostMapping("batchDelWbCategory")
+    public RS batchDelWbCategory(MultipartFile file) {
+
+        int delCount = wbCategoryService.batchDelWbCategory(file);
+        return RS.success().message("删除成功").data("delCount", delCount);
     }
 
 }
