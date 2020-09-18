@@ -50,7 +50,7 @@ public class WbCategoryController {
     @GetMapping("/getAllWbCategory")
     public RS getAllWbCategory() {
         ArrayList<WbCategory> allWbCategory = (ArrayList<WbCategory>) wbCategoryService.getAllWbCategory();
-        return RS.success().data("wbCategory", allWbCategory);
+        return RS.success().data("wbCategoryList", allWbCategory);
     }
 
     @ApiOperation(value = "通过excel批量添加网站")

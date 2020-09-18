@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class TbWebsiteController {
 
     @ApiOperation(value = "通过excel批量添加网站")
     @PostMapping("batchAddWebsite")
-    public RS batchAddWebsite(MultipartFile file) throws IOException {
+    public RS batchAddWebsite(@RequestParam(value = "file") MultipartFile file) throws IOException {
 
         Map<String, ArrayList<SimpleWebsite>> arrayListMapWebsite = tbWebsiteService.batchAddWebsite(file, tbWebsiteService);
         return RS.success().message("添加成功").data("batchAddResult", arrayListMapWebsite);
@@ -62,8 +63,6 @@ public class TbWebsiteController {
             @PathVariable("idList") ArrayList<String> idList
     ) throws IOException {
         ArrayList<SimpleWebsite> simpleWebsites = new ArrayList<>();
-
-        System.out.println(idList);
 
         if(idList.size() < 1) {
             throw new CustomException("OW20006", "输入的网站ID数组为空！");

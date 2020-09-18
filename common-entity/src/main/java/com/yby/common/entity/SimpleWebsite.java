@@ -14,6 +14,9 @@ public class SimpleWebsite {
     @ApiModelProperty(value = "网站地址")
     private String url;
 
-    @ApiModelProperty(value = "网站id")
+    @ApiModelProperty(value = "网站分类ID")
+    private String idCategory;
+
+    @ApiModelProperty(value = "管理员ID")
     private String idAdmin;
 }

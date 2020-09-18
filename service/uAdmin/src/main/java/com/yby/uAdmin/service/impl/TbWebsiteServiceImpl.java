@@ -6,6 +6,7 @@ import com.yby.common.entity.SimpleWebsite;
 import com.yby.commonUtils.JwtUtils;
 import com.yby.service.base.ES.ES;
 import com.yby.common.entity.TbWebsite;
+import com.yby.service.base.exception.CustomException;
 import com.yby.uAdmin.listener.OwExcelListener;
 import com.yby.uAdmin.mapper.TbWebsiteMapper;
 import com.yby.uAdmin.service.TbWebsiteService;
@@ -59,7 +60,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         * */
         OwExcelListener owExcelListener = new OwExcelListener(tbWebsiteService);
         EasyExcel.read(inputStream, SimpleWebsite.class, owExcelListener).sheet().doRead();
-        this.websiteArrayList = owExcelListener.getExcelDataList();
+        websiteArrayList = owExcelListener.getExcelDataList();
 
     }
 
@@ -75,9 +76,13 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
     @Override
     public void addWebsite(SimpleWebsite website) {
         //es.esAddDoc(client, website);
-        TbWebsite tbWebsite = new TbWebsite();
-        BeanUtils.copyProperties(website, tbWebsite);
-        baseMapper.insert(tbWebsite);
+        if(!isExitWebsite(website.getUrl())) {
+            TbWebsite tbWebsite = new TbWebsite();
+            BeanUtils.copyProperties(website, tbWebsite);
+            baseMapper.insert(tbWebsite);
+        } else {
+            throw new CustomException("OW20007", "该网站已经存在！");
+        }
     }
 
 
@@ -88,7 +93,7 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         ArrayList<SimpleWebsite> successWebsites = new ArrayList<>();
         Map<String, ArrayList<SimpleWebsite>> batchAddResult = new HashMap<>();
         try {
-            this.readWebsiteExcel(file, tbWebsiteService);
+            readWebsiteExcel(file, tbWebsiteService);
         } catch (IOException e) {
             e.printStackTrace();
         }

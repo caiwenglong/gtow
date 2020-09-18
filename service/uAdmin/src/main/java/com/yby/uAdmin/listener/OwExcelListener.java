@@ -3,6 +3,7 @@ package com.yby.uAdmin.listener;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.yby.common.entity.SimpleWebsite;
+import com.yby.service.base.exception.CustomException;
 import com.yby.uAdmin.service.TbWebsiteService;
 
 import java.util.ArrayList;
@@ -39,13 +40,14 @@ public class OwExcelListener extends AnalysisEventListener<SimpleWebsite> {
     public void invoke(SimpleWebsite website, AnalysisContext analysisContext) {
 
         if(website == null) {
-            System.out.println("null");
+            throw new CustomException("OW20002", "website信息不能为空！");
         }
 
         SimpleWebsite tbWebsite = new SimpleWebsite();
-        assert website != null;
         tbWebsite.setName(website.getName());
         tbWebsite.setUrl(website.getUrl());
+        tbWebsite.setIdAdmin(website.getIdAdmin());
+        tbWebsite.setIdCategory(website.getIdCategory());
 
 
         this.websiteArrayList.add(tbWebsite);
