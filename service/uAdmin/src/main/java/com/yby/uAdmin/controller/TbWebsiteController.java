@@ -50,9 +50,12 @@ public class TbWebsiteController {
 
     @ApiOperation(value = "通过excel批量添加网站")
     @PostMapping("batchAddWebsite")
-    public RS batchAddWebsite(@RequestParam(value = "file") MultipartFile file) throws IOException {
+    public RS batchAddWebsite(
+            @RequestParam(value = "idAdmin") String idAdmin,
+            @RequestParam(value = "file") MultipartFile file
+    ) {
 
-        Map<String, ArrayList<SimpleWebsite>> arrayListMapWebsite = tbWebsiteService.batchAddWebsite(file, tbWebsiteService);
+        Map<String, ArrayList<SimpleWebsite>> arrayListMapWebsite = tbWebsiteService.batchAddWebsite(file, idAdmin);
         return RS.success().message("添加成功").data("batchAddResult", arrayListMapWebsite);
     }
 
