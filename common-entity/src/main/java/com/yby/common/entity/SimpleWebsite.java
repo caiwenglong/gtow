@@ -1,7 +1,5 @@
 package com.yby.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -23,6 +21,4 @@ public class SimpleWebsite {
     @ApiModelProperty(value = "管理员ID")
     private String idAdmin;
 
-    @ApiModelProperty(value = "管理员ID")
-    private String keywords;
 }

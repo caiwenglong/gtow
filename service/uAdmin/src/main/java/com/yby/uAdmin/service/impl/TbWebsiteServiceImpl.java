@@ -97,11 +97,6 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         tbWebsite.setName(website.getName());
         tbWebsite.setUrl(website.getUrl());
         tbWebsite.setIdCategory(website.getIdCategory());
-        tbWebsite.setKeywords(website.getKeywords());
-        /*updateWrapper.set("url", website.getUrl());
-        updateWrapper.set("name",website.getName());
-        updateWrapper.set("id_category",website.getIdCategory());
-        updateWrapper.set("keywords",website.getKeywords());*/
         baseMapper.update(tbWebsite, updateWrapper);
     }
 
