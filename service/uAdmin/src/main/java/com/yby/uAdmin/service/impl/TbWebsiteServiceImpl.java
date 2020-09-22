@@ -1,6 +1,7 @@
 package com.yby.uAdmin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yby.common.entity.SimpleWebsite;
 import com.yby.commonUtils.excel.ExcelUtil;
 import com.yby.service.base.ES.ES;
@@ -88,6 +89,22 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         return batchAddResult;
     }
 
+    @Override
+    public void modifyWebsite(SimpleWebsite website) {
+        UpdateWrapper<TbWebsite> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", website.getId());
+        TbWebsite tbWebsite = selectWebsiteById(website.getId());
+        tbWebsite.setName(website.getName());
+        tbWebsite.setUrl(website.getUrl());
+        tbWebsite.setIdCategory(website.getIdCategory());
+        tbWebsite.setKeywords(website.getKeywords());
+        /*updateWrapper.set("url", website.getUrl());
+        updateWrapper.set("name",website.getName());
+        updateWrapper.set("id_category",website.getIdCategory());
+        updateWrapper.set("keywords",website.getKeywords());*/
+        baseMapper.update(tbWebsite, updateWrapper);
+    }
+
     // 批量删除
     @Override
     public void batchDelWebsite(ArrayList<String> idList) {
@@ -95,12 +112,22 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         baseMapper.deleteBatchIds(idList);
     }
 
+    // 查询用户上传的所有的网站
     @Override
     public List<TbWebsite> selectAllWebsite(String idAdmin) {
         QueryWrapper<TbWebsite> tbWebsiteQueryWrapper = new QueryWrapper<>();
         tbWebsiteQueryWrapper.eq("id_admin", idAdmin);
         return baseMapper.selectList(tbWebsiteQueryWrapper);
     }
+
+    // 通过网站ID查询网站详细信息
+    @Override
+    public TbWebsite selectWebsiteById(String id) {
+        QueryWrapper<TbWebsite> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id);
+        return baseMapper.selectOne(queryWrapper);
+    }
+
 
     @Override
     public void setWebsiteArrayList(List<SimpleWebsite> arrayList) {

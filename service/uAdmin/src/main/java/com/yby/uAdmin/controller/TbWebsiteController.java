@@ -59,6 +59,16 @@ public class TbWebsiteController {
         return RS.success().message("添加成功").data("batchAddResult", arrayListMapWebsite);
     }
 
+    @ApiOperation(value="修改网站")
+    @PostMapping("/modifyWebsite")
+    public RS modifyWebsite(
+            @ApiParam(name = "website", value = "网站对象")
+            @RequestBody SimpleWebsite website
+    ){
+        tbWebsiteService.modifyWebsite(website);
+        return RS.success();
+    }
+
     @ApiOperation(value = "批量删除网站")
     @DeleteMapping ("/batchDelWebsite/{idList}")
     public RS batchDelWebsite(
@@ -73,6 +83,16 @@ public class TbWebsiteController {
         tbWebsiteService.batchDelWebsite(idList);
 
         return RS.success();
+    }
+
+    @ApiOperation(value = "通过网站ID查询网站详细信息")
+    @GetMapping("/selectWebsiteById/{id}")
+    public RS selectWebsiteById(
+            @ApiParam(name = "id", value = "网站id")
+            @PathVariable String id
+    ) {
+        TbWebsite tbWebsite = tbWebsiteService.selectWebsiteById(id);
+        return RS.success().data("tbWebsite", tbWebsite);
     }
 
     @ApiOperation(value = "查询用户上传的网站")
