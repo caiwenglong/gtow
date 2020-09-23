@@ -69,14 +69,22 @@ public class TbWebsiteController {
         return RS.success();
     }
 
+    @ApiOperation(value="删除网站")
+    @DeleteMapping("/delWebsiteById/{idWebsite}")
+    public RS delWebsiteById(
+            @ApiParam(name = "idWebsite", value = "网站ID", required = true)
+            @PathVariable("idWebsite") String idWebsite
+    ) {
+        tbWebsiteService.delWebsiteById(idWebsite);
+        return RS.success();
+    }
+
     @ApiOperation(value = "批量删除网站")
-    @DeleteMapping ("/batchDelWebsite/{idList}")
+    @DeleteMapping ("/batchDelWebsite")
     public RS batchDelWebsite(
             @ApiParam(name = "idList", value = "网站ID数组", required = true, allowMultiple = true)
-            @PathVariable("idList") ArrayList<String> idList
-    ) throws IOException {
-        ArrayList<SimpleWebsite> simpleWebsites = new ArrayList<>();
-
+            @RequestBody ArrayList<String> idList
+    ) {
         if(idList.size() < 1) {
             throw new CustomException("OW20006", "输入的网站ID数组为空！");
         }

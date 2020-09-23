@@ -24,7 +24,11 @@ public interface TbWebsiteService extends IService<TbWebsite> {
     // 通过excel批量添加数据
     Map<String, ArrayList<SimpleWebsite>> batchAddWebsite(MultipartFile file, String idAdmin);
 
+    // 修改网站
     void modifyWebsite(SimpleWebsite website);
+
+    // 通过ID删除网站
+    void delWebsiteById(String idWebsite);
 
     // 批量删除网站
     void batchDelWebsite(ArrayList<String> idList);

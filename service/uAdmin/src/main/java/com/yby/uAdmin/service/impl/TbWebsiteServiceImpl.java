@@ -100,6 +100,12 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         baseMapper.update(tbWebsite, updateWrapper);
     }
 
+    // 通过网站ID删除网站
+    @Override
+    public void delWebsiteById(String idWebsite) {
+        baseMapper.deleteById(idWebsite);
+    }
+
     // 批量删除
     @Override
     public void batchDelWebsite(ArrayList<String> idList) {
