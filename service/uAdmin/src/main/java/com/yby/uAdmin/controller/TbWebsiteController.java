@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,14 +105,17 @@ public class TbWebsiteController {
     }
 
     @ApiOperation(value = "查询用户上传的网站")
-    @GetMapping("/selectAllWebsite/{idAdmin}")
+    @GetMapping("/selectAllWebsite/{idAdmin}/{pageNum}/{pageSize}")
     public RS selectAllWebsite(
         @ApiParam(name = "idAdmin", value = "用户id")
-        @PathVariable String idAdmin
+        @PathVariable String idAdmin,
+        @PathVariable Integer pageNum,
+        @PathVariable Integer pageSize
     ) {
-        List<TbWebsite> tbWebsites = tbWebsiteService.selectAllWebsite(idAdmin);
-
-        return RS.success().data("tbWebsites", tbWebsites);
+        HashMap<Object, Object> tbWebsitesData = tbWebsiteService.selectAllWebsite(idAdmin, pageNum, pageSize);
+        ArrayList<TbWebsite> tbWebsites = (ArrayList<TbWebsite>) tbWebsitesData.get("websiteList");
+        Integer total = (Integer) tbWebsitesData.get("total");
+        return RS.success().data("tbWebsites", tbWebsites).data("total", total);
     }
 
 }

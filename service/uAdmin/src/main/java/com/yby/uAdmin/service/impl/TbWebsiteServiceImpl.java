@@ -2,6 +2,8 @@ package com.yby.uAdmin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yby.common.entity.SimpleWebsite;
 import com.yby.commonUtils.excel.ExcelUtil;
 import com.yby.service.base.ES.ES;
@@ -115,10 +117,24 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
 
     // 查询用户上传的所有的网站
     @Override
-    public List<TbWebsite> selectAllWebsite(String idAdmin) {
+    public HashMap<Object, Object> selectAllWebsite(String idAdmin, Integer pageNum, Integer pageSize) {
+        // 创建page对象
+        Page<TbWebsite> tbWebsitePage = new Page<TbWebsite>(pageNum, pageSize);
+        // 构造查询条件
         QueryWrapper<TbWebsite> tbWebsiteQueryWrapper = new QueryWrapper<>();
         tbWebsiteQueryWrapper.eq("id_admin", idAdmin);
-        return baseMapper.selectList(tbWebsiteQueryWrapper);
+        // 分页查询
+        IPage<TbWebsite> websiteIPage = baseMapper.selectPage(tbWebsitePage, tbWebsiteQueryWrapper);
+        List<TbWebsite> list = websiteIPage.getRecords();
+
+        // 查询总条数
+        Integer total = baseMapper.selectCount(tbWebsiteQueryWrapper);
+        System.out.println(total);
+
+        HashMap<Object, Object> hashMap = new HashMap<>();
+        hashMap.put("total", total);
+        hashMap.put("websiteList", new ArrayList<>(list));
+        return hashMap;
     }
 
     // 通过网站ID查询网站详细信息

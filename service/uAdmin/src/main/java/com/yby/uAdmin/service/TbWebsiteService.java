@@ -5,6 +5,7 @@ import com.yby.common.entity.TbWebsite;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public interface TbWebsiteService extends IService<TbWebsite> {
     void batchDelWebsite(ArrayList<String> idList);
 
     // 查询用户上传的网站
-    List<TbWebsite> selectAllWebsite(String idAdmin);
+    HashMap<Object, Object> selectAllWebsite(String idAdmin, Integer pageNum, Integer pageSize);
 
     // 通过网站ID查询网站详细信息
     TbWebsite selectWebsiteById(String id);
