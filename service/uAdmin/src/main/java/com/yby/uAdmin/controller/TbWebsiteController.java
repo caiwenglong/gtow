@@ -118,5 +118,18 @@ public class TbWebsiteController {
         return RS.success().data("tbWebsites", tbWebsites).data("total", total);
     }
 
+    @ApiOperation(value="网站关键字")
+    @GetMapping("/modifyWebsiteKeywords/{websiteId}/{keywords}")
+    public RS modifyWebsiteKeywords(
+            @ApiParam(name = "keywords", value = "网站关键字")
+            @PathVariable String keywords,
+            @PathVariable String websiteId){
+        if(keywords == "null") {
+            keywords = "";
+        }
+        tbWebsiteService.modifyWebsiteKeywords(websiteId, keywords);
+        return RS.success();
+    }
+
 }
 

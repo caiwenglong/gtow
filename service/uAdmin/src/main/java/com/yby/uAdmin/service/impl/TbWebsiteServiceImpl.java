@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -62,6 +59,22 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         if(!isExitWebsite(website.getUrl())) {
             TbWebsite tbWebsite = new TbWebsite();
             BeanUtils.copyProperties(website, tbWebsite);
+            // 通过excel上传网站信息时，关键字可能是用中文的”，“隔开的，这样需要转成英文的逗号
+            if(tbWebsite.getKeywords().contains("，")) {
+                String[] keywordsArr = tbWebsite.getKeywords().split("，");
+                String keywordsStr = "";
+                if (keywordsArr.length <= 0) {
+                    keywordsStr = "";
+                } else {
+                    for (int i = 0; i < keywordsArr.length; i++) {
+                        keywordsStr += keywordsArr[i];
+                        if(i < keywordsArr.length -1) {
+                            keywordsStr += ",";
+                        }
+                    }
+                }
+                tbWebsite.setKeywords(keywordsStr);
+            }
             baseMapper.insert(tbWebsite);
         } else {
             throw new CustomException("OW20007", "该网站已经存在！");
@@ -145,10 +158,18 @@ public class TbWebsiteServiceImpl extends ServiceImpl<TbWebsiteMapper, TbWebsite
         return baseMapper.selectOne(queryWrapper);
     }
 
-
     @Override
     public void setWebsiteArrayList(List<SimpleWebsite> arrayList) {
         websiteArrayList = (ArrayList<SimpleWebsite>) arrayList;
+    }
+
+    @Override
+    public void modifyWebsiteKeywords(String websiteId, String keywords) {
+        UpdateWrapper<TbWebsite> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", websiteId);
+        TbWebsite tbWebsite = selectWebsiteById(websiteId);
+        tbWebsite.setKeywords(keywords);
+        baseMapper.update(tbWebsite, updateWrapper);
     }
 
     // 读取excel文件

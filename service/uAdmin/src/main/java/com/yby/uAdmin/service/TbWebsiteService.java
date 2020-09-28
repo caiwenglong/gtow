@@ -43,4 +43,6 @@ public interface TbWebsiteService extends IService<TbWebsite> {
     // 通过excelUtil得到excel内容
     void setWebsiteArrayList(List<SimpleWebsite> arrayList);
 
+    // 修改网站字段
+    void modifyWebsiteKeywords(String websiteId, String keywords);
 }

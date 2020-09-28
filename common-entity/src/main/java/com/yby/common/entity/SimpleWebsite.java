@@ -18,6 +18,9 @@ public class SimpleWebsite {
     @ApiModelProperty(value = "网站分类ID")
     private String idCategory;
 
+    @ApiModelProperty(value = "网站关键字")
+    private String keywords;
+
     @ApiModelProperty(value = "管理员ID")
     private String idAdmin;
 
