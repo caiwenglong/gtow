@@ -58,5 +58,11 @@ public class UserController {
         UserInfoVo userInfo = userService.getUserInfo(request);
         return RS.success().data("result", userInfo);
     }
+
+    @ApiOperation(value = "退出登录")
+    @GetMapping("/logout")
+    public RS logout() {
+        return userService.logout();
+    }
 }
 

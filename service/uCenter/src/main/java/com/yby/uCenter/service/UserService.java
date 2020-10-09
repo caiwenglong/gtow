@@ -28,4 +28,5 @@ public interface UserService extends IService<User> {
     // 获取用户信息
     UserInfoVo getUserInfo(HttpServletRequest token);
 
+    public RS logout();
 }

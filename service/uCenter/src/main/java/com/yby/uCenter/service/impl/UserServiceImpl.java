@@ -98,4 +98,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BeanUtils.copyProperties(user, userInfoVo);
         return userInfoVo;
     }
+
+    @Override
+    public RS logout() {
+        return RS.success().data("token", null);
+    }
 }
