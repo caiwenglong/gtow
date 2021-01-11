@@ -124,7 +124,7 @@ public class TbWebsiteController {
             @ApiParam(name = "keywords", value = "网站关键字")
             @PathVariable String keywords,
             @PathVariable String websiteId){
-        if(keywords == "null") {
+        if(keywords.equals("null")) {
             keywords = "";
         }
         tbWebsiteService.modifyWebsiteKeywords(websiteId, keywords);
